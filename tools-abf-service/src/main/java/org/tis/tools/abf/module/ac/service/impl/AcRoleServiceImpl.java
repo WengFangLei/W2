@@ -16,6 +16,15 @@ import org.tis.tools.abf.module.ac.service.IAcRoleService;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class AcRoleServiceImpl extends ServiceImpl<AcRoleMapper, AcRole> implements IAcRoleService {
-
+    @Override
+    public AcRole add(String rolecode, String rolename, String guidapp, String enabled) {
+        AcRole acrole = new AcRole();
+        acrole.setRoleCode(rolecode);
+        acrole.setRoleName(rolename);
+        acrole.setGuidApp(guidapp);
+        acrole.setEnable(enabled);
+        insert(acrole);
+        return acrole;
+    }
 }
 
