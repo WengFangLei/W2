@@ -1,7 +1,11 @@
 package org.tis.tools.abf.module.ac.controller;
 
+import org.tis.tools.abf.module.ac.controller.request.AcRoleAddRequest;
 import org.tis.tools.abf.module.ac.entity.AcRole;
 import org.springframework.validation.annotation.Validated;
+import org.tis.tools.abf.module.common.log.OperateLog;
+import org.tis.tools.abf.module.common.log.OperateType;
+import org.tis.tools.abf.module.common.log.ReturnType;
 import org.tis.tools.core.web.controller.BaseController;
 import org.tis.tools.core.web.vo.SmartPage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +26,18 @@ public class AcRoleController extends BaseController<AcRole>  {
 
     @Autowired
     private IAcRoleService acRoleService;
-
+    @OperateLog(
+            operateType = OperateType.ADD,  // 操作类型
+            operateDesc = "新增角色", // 操作描述
+            retType = ReturnType.Object, // 返回类型，对象或数组
+            id = "roleCode", // 操作对象标识
+            name = "roleName", // 操作对象名
+            keys = {"roleCode", "roleName"}) // 操作对象的关键值的键值名
     @PostMapping("/add")
-    public ResultVO add(@RequestBody @Validated AcRole acRole) {
-        acRoleService.insert(acRole);
-        return ResultVO.success("新增成功！");
+    public ResultVO add(@RequestBody @Validated AcRoleAddRequest request) {
+        AcRole acRole;
+        acRole = acRoleService.add(request.getRoleCode(),request.getRoleName(),request.getGuidApp(),request.getEnabled());
+        return ResultVO.success("新增成功",acRole);
     }
     
     @PutMapping
